@@ -1,0 +1,92 @@
+﻿@model DaygonPortfolio.Models.Project
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="container my-5" style="max-width: 900px;">
+    <a asp-action="Index" class="btn btn-outline-custom btn-sm mb-4 rounded-pill px-3 py-2">
+        <i class="fa-solid fa-arrow-left me-1"></i> Back to Directory
+    </a>
+
+    <!-- Main Project Card -->
+    <div class="project-card mb-4 p-0">
+        <div class="card-img-wrapper" style="height: 260px;">
+            <img src="@Model.ImageUrl" 
+                 alt="@Model.Title" 
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div class="fallback-banner" style="display: none;">
+                <i class="fa-solid fa-laptop-code display-2"></i>
+            </div>
+        </div>
+
+        <div class="p-4 p-md-5">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <span class="badge-tech">Repository Details</span>
+                <span class="text-muted small fw-bold">• ID: @Model.Id</span>
+            </div>
+
+            <h1 class="fw-bold mb-4" style="color: #0f172a;">@Model.Title</h1>
+            
+            <!-- GitHub Link Box -->
+            <div class="p-3 mb-4 rounded-3" style="background-color: #f1f5f9; border: 1px solid #cbd5e1;">
+                <span class="d-block mb-1 fw-bold small" style="color: #0f172a;"><i class="fa-brands fa-github me-1"></i> GitHub Repository URL</span>
+                <a href="@Model.GithubUrl" target="_blank" class="text-decoration-none fw-bold" style="color: #2563eb; font-size: 1rem; word-break: break-all;">
+                    @Model.GithubUrl <i class="fa-solid fa-arrow-up-right-from-square ms-1 small"></i>
+                </a>
+            </div>
+
+            <!-- Description -->
+            <h5 class="fw-bold mb-3" style="color: #0f172a;"><i class="fa-solid fa-align-left me-2 text-primary"></i>Detailed Overview</h5>
+            <p class="fs-6" style="line-height: 1.8; color: #334155; font-weight: 500;">
+                @Model.DetailedDescription
+            </p>
+        </div>
+    </div>
+
+    <!-- Comments Card -->
+    <div class="project-card p-4 p-md-5">
+        <h4 class="fw-bold mb-4" style="color: #0f172a;">
+            <i class="fa-regular fa-comments me-2 text-primary"></i>Discussion & Feedback (@Model.Comments.Count)
+        </h4>
+
+        <!-- Post Comment Form -->
+        <form asp-action="AddComment" method="post" class="mb-5">
+            <input type="hidden" name="projectId" value="@Model.Id" />
+            <div class="mb-3">
+                <label class="form-label fw-bold small" style="color: #0f172a;">Your Name / Handle</label>
+                <input type="text" name="author" class="form-control form-control-custom py-2" placeholder="e.g. John Doe (Optional)" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold small" style="color: #0f172a;">Comment *</label>
+                <textarea name="text" class="form-control form-control-custom" rows="3" placeholder="Write feedback or notes about this repository..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary-custom px-4 py-2 rounded-2">
+                <i class="fa-solid fa-paper-plane me-1"></i> Post Comment
+            </button>
+        </form>
+
+        <!-- List of Comments -->
+        <div class="d-flex flex-column gap-3">
+            @if (!Model.Comments.Any())
+            {
+                <div class="text-center py-4 rounded-3" style="background-color: #f1f5f9; border: 1px dashed #cbd5e1; color: #64748b;">
+                    <i class="fa-solid fa-comment-dots d-block mb-2 text-secondary fs-3"></i>
+                    No comments posted yet. Be the first to share feedback!
+                </div>
+            }
+            else
+            {
+                @foreach (var comment in Model.Comments.OrderByDescending(c => c.CreatedAt))
+                {
+                    <div class="p-3 rounded-3" style="background-color: #f1f5f9; border: 1px solid #cbd5e1;">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="fw-bold" style="color: #0f172a;"><i class="fa-solid fa-circle-user me-1 text-primary"></i> @comment.Author</span>
+                            <span class="text-muted small">@comment.CreatedAt.ToString("MMM dd, yyyy • HH:mm")</span>
+                        </div>
+                        <p class="mb-0 small" style="line-height: 1.6; color: #334155; font-weight: 500;">@comment.Text</p>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

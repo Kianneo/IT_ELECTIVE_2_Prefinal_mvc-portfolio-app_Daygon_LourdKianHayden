@@ -1,0 +1,63 @@
+﻿@model IEnumerable<DaygonPortfolio.Models.Project>
+@{
+    ViewData["Title"] = "Project Showcase";
+}
+
+<!-- Hero Section -->
+<section class="hero-banner mb-5">
+    <div class="container">
+        <span class="badge badge-tech mb-3 px-3 py-2">IT ELECTIVE 2 PORTFOLIO SHOWCASE</span>
+        <h1 class="hero-title">GitHub Project Directory</h1>
+        <p class="hero-subtitle">
+            A comprehensive list of academic repositories, C# MVC web applications, and programming assignments.
+        </p>
+        <div class="d-flex justify-content-center gap-2 flex-wrap">
+            <span class="badge bg-light text-dark border px-3 py-2"><i class="fa-brands fa-microsoft me-1 text-primary"></i> .NET Core MVC</span>
+            <span class="badge bg-light text-dark border px-3 py-2"><i class="fa-solid fa-code me-1 text-primary"></i> C# Language</span>
+            <span class="badge bg-light text-dark border px-3 py-2"><i class="fa-brands fa-github me-1 text-primary"></i> Public Repositories</span>
+        </div>
+    </div>
+</section>
+
+<!-- Grid Section -->
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var project in Model)
+        {
+            <div class="col">
+                <div class="project-card">
+                    <!-- Image Wrapper -->
+                    <div class="card-img-wrapper">
+                        <img src="@project.ImageUrl" 
+                             alt="@project.Title" 
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                        <div class="fallback-banner" style="display: none;">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                    </div>
+
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <span class="badge-tech">Project #@project.Id</span>
+                            <span class="badge bg-success text-white"><i class="fa-solid fa-circle-check me-1"></i>Public</span>
+                        </div>
+
+                        <h5 class="fw-bold mb-2" style="color: #0f172a;">@project.Title</h5>
+                        <p class="small flex-grow-1 mb-4" style="color: #334155; line-height: 1.6; font-weight: 500;">
+                            @project.ShortDescription
+                        </p>
+
+                        <div class="d-flex gap-2 pt-3 border-top">
+                            <a asp-action="Details" asp-route-id="@project.Id" class="btn btn-primary-custom btn-sm flex-grow-1 py-2 rounded-2">
+                                <i class="fa-solid fa-circle-info me-1"></i> View Details
+                            </a>
+                            <a href="@project.GithubUrl" target="_blank" class="btn btn-outline-custom btn-sm px-3 py-2 rounded-2" title="View Source Code">
+                                <i class="fa-brands fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
